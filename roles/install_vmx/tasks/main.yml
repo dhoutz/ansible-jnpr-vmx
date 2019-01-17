@@ -1,0 +1,23 @@
+---
+#- name: create directory to install the vmx
+#  file: path=/home/vmx/ state=directory
+
+#- name: copy vmx image to host
+#  copy:
+#    src: "{{source_dir}}/vmx-bundle-{{ vmx_version }}.tgz"
+#    dest: /home/vmx
+
+- name: download vmx tgz image to host
+  get_url:
+    url: "{{vmx_image_url}}"
+    dest: "/home"
+    #checksum: {{vmx_image_checksum}}
+
+- name: unpack vmx tgz image
+  unarchive: remote_src=yes src=/home/vmx-bundle-{{ vmx_version }}.tgz dest=/home owner=root group=root
+  register: output
+
+- name: remove vmx tgz image
+  file:
+    state: absent
+    path: "/home/vmx-bundle-{{ vmx_version }}.tgz"

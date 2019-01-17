@@ -1,0 +1,22 @@
+vmx_version: 17.4R2.4
+vmx_instances:
+  - vmx_name: vmx1
+    host_mgmt_int: bond0
+    vmx_mac: 01
+    vmx_re_vcpus: 1
+    vmx_re_memory_mb: 1024
+    vmx_re_console_port: 8601
+    vmx_fpc_memory_mb: 6144
+    vmx_fpc_vcpus: 3
+    vmx_fpc_console_port: 8602
+    vmx_fpc_device_type: virtio
+  - vmx_name: vmx2
+    host_mgmt_int: bond0
+    vmx_mac: 02
+    vmx_re_vcpus: 1
+    vmx_re_memory_mb: 1024
+    vmx_re_console_port: 8603
+    vmx_fpc_memory_mb: 6144
+    vmx_fpc_vcpus: 3
+    vmx_fpc_console_port: 8604
+    vmx_fpc_device_type: virtio

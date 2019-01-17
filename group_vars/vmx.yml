@@ -1,0 +1,6 @@
+source_dir: /Users/dhoutz/Downloads
+vmx_images:
+  17.4R2.4:
+    vmx_re_image: "junos-vmx-x86-64-17.4R2.4.qcow2"
+    vmx_re_hdd: "vmxhdd.img"
+    vmx_fpc_image: "vFPC-20180803.img"

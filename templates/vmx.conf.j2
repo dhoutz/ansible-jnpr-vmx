@@ -1,0 +1,63 @@
+##############################################################
+#
+#  vmx.conf
+#  Config file for vmx on the hypervisor.
+#  Uses YAML syntax.
+#  Leave a space after ":" to specify the parameter value.
+#
+##############################################################
+
+---
+#Configuration on the host side - management interface, VM images etc.
+HOST:
+    identifier                : {{item['vmx_name']}}
+    host-management-interface : {{item['host_mgmt_int']}}
+    routing-engine-image      : "/home/vmx/images/{{vmx_images[vmx_version]['vmx_re_image']}}"
+    routing-engine-hdd        : "/home/vmx/images/{{vmx_images[vmx_version]['vmx_re_hdd']}}"
+    forwarding-engine-image   : "/home/vmx/images/{{vmx_images[vmx_version]['vmx_fpc_image']}}"
+
+---
+#External bridge configuration
+BRIDGES:
+    - type  : external
+      name  : br-ext                  # Max 10 characters
+
+---
+#vRE VM parameters
+CONTROL_PLANE:
+    vcpus       : {{item['vmx_re_vcpus']}}
+    memory-mb   : {{item['vmx_re_memory_mb']}}
+    console_port: {{item['vmx_re_console_port']}}
+
+    interfaces  :
+      - type      : static
+        ipaddr    : 10.102.144.94
+        macaddr   : "0A:00:DD:C0:{{item['vmx_mac']}}:E0"
+
+---
+#vPFE VM parameters
+FORWARDING_PLANE:
+    memory-mb   : {{item['vmx_fpc_memory_mb']}}
+    vcpus       : {{item['vmx_fpc_vcpus']}}
+    console_port: {{item['vmx_fpc_console_port']}}
+    device-type : {{item['vmx_fpc_device_type']}}
+
+    interfaces  :
+      - type      : static
+        ipaddr    : 10.102.144.98
+        macaddr   : "0A:00:DD:C0:{{item['vmx_mac']}}:10"
+
+---
+#Interfaces
+JUNOS_DEVICES:
+   - interface            : ge-0/0/0
+     mac-address          : "02:06:0A:0E:{{item['vmx_mac']}}:00"
+     description          : "ge-0/0/0 interface"
+
+   - interface            : ge-0/0/1
+     mac-address          : "02:06:0A:0E:{{item['vmx_mac']}}:01"
+     description          : "ge-0/0/1 interface"
+
+   - interface            : ge-0/0/2
+     mac-address          : "02:06:0A:0E:{{item['vmx_mac']}}:02"
+     description          : "ge-0/0/2 interface"

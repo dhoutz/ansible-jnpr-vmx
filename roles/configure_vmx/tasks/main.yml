@@ -1,0 +1,35 @@
+- name: delete default vmx config file
+  file:
+    state: absent
+    path: "/home/vmx/config/vmx.conf"
+
+- name: generate config for vmx instance
+  template:
+    src: "templates/vmx.conf.j2"
+    dest: "/home/vmx/config/{{item['vmx_name']}}.conf"
+  loop: "{{hostvars[inventory_hostname].vmx_instances}}"
+
+- name: copy interface/bridge config file
+  copy:
+    src: "configs/{{inventory_hostname}}/vmx-junosdev.conf"
+    dest: "/home/vmx/config/"
+
+- name: restart libvirt
+  systemd:
+    name: libvirt-bin
+    state: restarted
+
+- name: start vmx instances
+  command: "/home/vmx/vmx.sh --cfg config/{{item['vmx_name']}}.conf --install"
+  args:
+    chdir: "/home/vmx"
+  loop: "{{hostvars[inventory_hostname].vmx_instances}}"
+  tags:
+    - start-vmx
+
+- name: configure interfaces/bridges
+  command: "/home/vmx/vmx.sh --bind-dev"
+  args:
+    chdir: "/home/vmx"
+  tags:
+    - configure-interfaces

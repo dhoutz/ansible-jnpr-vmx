@@ -1,0 +1,57 @@
+# Tested against:
+#   vmx 17.4 on Ubuntu 16.04
+---
+- name: Prepare host for Juniper vMX
+  hosts: vmx
+  gather_facts: no
+  tasks:
+    - name: Install dependencies for Ubuntu
+      apt:
+        update_cache: yes
+        name:
+          - bridge-utils
+          - qemu-kvm
+          - libvirt-bin
+          - python
+          - python-netifaces
+          - vnc4server
+          - libyaml-dev
+          - python-yaml
+          - numactl
+          - libparted0-dev
+          - libpciaccess-dev
+          - libnuma-dev
+          - libyajl-dev
+          - libxml2-dev
+          - libglib2.0-dev
+          - libnl-3-dev
+          - python-pip
+          - python-dev
+          - libxml2-dev
+          - libxslt-dev
+          - psmisc
+          - telnet
+    - name: Create hugepages directory
+      file:
+        path: /hugepages
+        state: directory
+
+- name: Install vMX
+  hosts: vmx
+  gather_facts: no
+  vars_prompt:
+    name: vmx_image_url
+    prompt: "\nEnter URL to download Juniper vMX image from"
+    private: no
+  roles:
+    - role: install_vmx
+  tags:
+    - install
+
+- name: Configure vMX instances
+  hosts: vmx
+  gather_facts: no
+  roles:
+    - role: configure_vmx
+  tags:
+    - configure
