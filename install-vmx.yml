@@ -35,6 +35,8 @@
       file:
         path: /hugepages
         state: directory
+  tags:
+    - prepare
 
 - name: Install vMX
   hosts: vmx
@@ -45,13 +47,11 @@
     private: no
   roles:
     - role: install_vmx
-  tags:
-    - install
+      tags: install
 
 - name: Configure vMX instances
   hosts: vmx
   gather_facts: no
   roles:
     - role: configure_vmx
-  tags:
-    - configure
+      tags: configure
