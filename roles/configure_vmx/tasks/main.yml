@@ -15,7 +15,7 @@
     dest: "/home/vmx/config/"
 
 - name: restart libvirt
-  systemd:
+  service:
     name: libvirt-bin
     state: restarted
 
